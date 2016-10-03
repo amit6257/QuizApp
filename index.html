@@ -22,7 +22,7 @@
 			var questionSet="";
 			var choices;
 			for(i = 0;i<allQuestionsGlobal.length;i++) {
-				question = allQuestionsGlobal[i].question + "<BR>";
+				question = "<B>Q " + (i+1) + "- " + allQuestionsGlobal[i].question + "</B><BR>";
 				choices = "";
 				for(j=0;j<allQuestionsGlobal[i].choices.length;j++) {
 					choices += getOptionForStringWithValue(allQuestionsGlobal[i].choices[j], i, allQuestionsGlobal[i].choices[j]) + "<BR>";
