@@ -2,58 +2,20 @@
 <html>
 <head>
 	<script>
-	var allQuestionsGlobal = [{question: "Who is President of the United Kingdom?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0},
+
+		var allQuestionsGlobal = 
+
+			[
+			
+			{question: "Who is President of the United Kingdom?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0},
 			{question: "Who is President of the US?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0},
-			{question: "Who is President of the India?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0}];
-		function onClickMethod () {
-			var x = "hello x";
-			document.getElementById("butt").innerHTML=x;
-		}
-
-		function getQuestion() {
-			var question = "Square of 4 is ??<BR>";
-			var option1 = "16 <input type='radio'><BR>";
-			var option2 = "45 <input type='radio'><BR>";
-			var option3 = "45546 <input type='radio'><BR>";
-			var option4 = "-546 <input type='radio'><BR>";
-			return question+option1+option2+option3+option4;
-		}
-
-		function getOptionForString(str) {
-			return str + "<input type='radio' name='choseone'><BR>";
-		}
-
-		function getGoodQuestion() {
-			var allQuestions = [{question: "Who is Prime Minister of the United Kingdom?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0}];
-			var question = allQuestions[0].question+"<BR>";
-
-			var choices;
 			
-			for(i=0;i<allQuestions[0].choices.length;i++) {
-				choices += getOptionForString(allQuestions[0].choices[i]) + "<BR>";
-			}
-			return question+choices;
-		}
+			{question: "Who is President of the India?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0}
 
-		function getMultipleQuestion() {
-			var allQuestions = [{question: "Who is Prime Minister of the United Kingdom?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0},
-			{question: "Who is Prime Minister of the US?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0},
-			{question: "Who is Prime Minister of the India?", choices: ["David Cameron", "Gordon Brown", "Winston Churchill", "Tony Blair"], correctAnswer:0}];
-			
-			var questionSet="";
-			var choices;
-			for(i = 0;i<allQuestions.length;i++) {
-				question = allQuestions[i].question + "<BR>";
-				choices = "";
-				for(j=0;j<allQuestions[i].choices.length;j++) {
-					choices += getOptionForString(allQuestions[i].choices[j]) + "<BR>";
-					console.log(choices);
-				}
-				questionSet += question + choices + "<BR><BR><BR>"
-
-			}
-			
-			return questionSet;
+			];
+		
+		function getOptionForStringWithValue(str, i, value) {
+			return str + "<input type='radio' name=option"+i+" value='"+value+"'><BR>";
 		}
 
 		function getMultipleQuestionGlobalVars() {
@@ -63,14 +25,74 @@
 				question = allQuestionsGlobal[i].question + "<BR>";
 				choices = "";
 				for(j=0;j<allQuestionsGlobal[i].choices.length;j++) {
-					choices += getOptionForString(allQuestionsGlobal[i].choices[j]) + "<BR>";
-					console.log(choices);
+					choices += getOptionForStringWithValue(allQuestionsGlobal[i].choices[j], i, allQuestionsGlobal[i].choices[j]) + "<BR>";
 				}
-				questionSet += question + choices + "<BR><BR><BR>"
 
+				questionSet += question + choices + "<BR><BR><BR>";
 			}
 			
 			return questionSet;
+		}
+
+		function validateAnswer() {
+			if(isAnyQuestionUnattempted()) {
+				window.alert("Please answer all questions ");
+				return 2;
+			}
+
+			for(i = 0;i<allQuestionsGlobal.length; i++) {
+				var alloptions = document.getElementsByName('option'+i);
+
+				//get selected answer
+				var userAnswer = "";
+				for(j=0;j<alloptions.length;j++) {
+					if(alloptions[j].checked) {
+						userAnswer = alloptions[j].value;
+						break;
+					}
+				}
+
+				var actualAnswer = allQuestionsGlobal[i].choices[allQuestionsGlobal[i].correctAnswer];
+				
+				if(actualAnswer != userAnswer) {
+					return 0;
+				}
+			}
+
+			return 1;
+		}
+
+		function isAnyQuestionUnattempted() {
+			for(i = 0;i<allQuestionsGlobal.length; i++) {
+				var alloptions = document.getElementsByName('option'+i);
+
+				var answerMarked = false;
+				for(j=0;j<alloptions.length;j++) {
+					if(alloptions[j].checked) {
+						answerMarked = true;
+					}
+				}
+
+				if(!answerMarked) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function submitAnswer() {
+			var isValid = validateAnswer();
+			if(isValid == 2) {
+				return;
+			}
+
+			if(isValid == 0) {
+				window.alert("Wrong answer");
+				return;
+			}
+
+			window.alert("Congratulation");
 		}
 
 
@@ -80,49 +102,10 @@
 
 <h1>Quiz time !!</h1>
 
-<p id="square">4 square = </p>
-<p id="butt">button click text</p>
-<p>This is a radio button <input type="radio"></p>
-
-<button type="button" onclick="document.getElementById('butt').innerHTML=Date()" >
-Click me for date
-</button>
-
-<button type="button" onclick="document.getElementById('butt').innerHTML='hello'" >
-Click me for hello text
-</button>
-
-<button type="button" onclick="window.alert('Alert winddow says hello')" >
-Show window alert
-</button>
-
-<button type="button" onclick="document.write(5 + 6)" >
-Show document.write
-</button>
-
-<button type="button" onclick="console.log(5 + 6)" >
-Show console.log(5 + 6);
-</button>
-
-<button onclick="onClickMethod()">Click to call function</button>
-<hr>
-<p id="question"></p>
-<p id="goodquestion"></p>
-<HR>
-<p id="multiplequestion"></p>
-<HR><HR>
 <p id="multiplequestionGlobal"></p>
-<script>
-function getSquare(num) {
-    return num * num;
-}
-</script>
+<button onclick="submitAnswer()">Submit</button>
 
 <script>
-	document.getElementById("square").innerHTML = getSquare(4);
-	document.getElementById("question").innerHTML = getQuestion();
-	document.getElementById("goodquestion").innerHTML = getGoodQuestion();
-	document.getElementById("multiplequestion").innerHTML = getMultipleQuestion();
 	document.getElementById("multiplequestionGlobal").innerHTML = getMultipleQuestionGlobalVars();
 </script>
 </body>
